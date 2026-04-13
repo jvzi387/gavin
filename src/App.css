@@ -1,0 +1,62 @@
+/* ================================================================
+   App.css – global styles & responsive overrides for PyData 学堂
+   ================================================================ */
+
+/* Reset & base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background: #f1f5f9;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* ================================================================
+   Responsive – mobile sidebar
+   ================================================================ */
+
+@media (max-width: 768px) {
+  /* Show mobile header */
+  [data-mobile-header] {
+    display: flex !important;
+  }
+
+  /* Sidebar becomes a drawer */
+  aside {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    z-index: 1050;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+  }
+
+  aside[data-open="true"] {
+    transform: translateX(0);
+  }
+
+  /* Push main content below mobile header */
+  main {
+    margin-top: 56px;
+  }
+}
