@@ -6,6 +6,7 @@ import Learn from "@/pages/Learn";
 import Practice from "@/pages/Practice";
 import Achievements from "@/pages/Achievements";
 import Profile from "@/pages/Profile";
+import DataAnalysisFundamentals from "@/pages/DataAnalysisFundamentals";
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/practice/:courseId" element={<Practice />} />
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/fundamentals" element={<DataAnalysisFundamentals />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

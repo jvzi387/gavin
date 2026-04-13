@@ -104,6 +104,52 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 数据分析基础 */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">数据分析基础</h2>
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="flex flex-col md:flex-row">
+              <div className="md:w-1/2 bg-blue-100 p-8 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-6xl mb-4 block">📊</span>
+                  <h3 className="text-2xl font-bold mb-2">AI 时代 Python 数据分析知识框架</h3>
+                  <p className="text-gray-700 mb-6">从基础到高级的完整学习路径</p>
+                  <Link to="/fundamentals" className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors inline-block">
+                    开始学习
+                  </Link>
+                </div>
+              </div>
+              <div className="md:w-1/2 p-8">
+                <h4 className="text-xl font-semibold mb-4">核心内容</h4>
+                <ul className="space-y-3">
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    <span>AI 协作基础能力</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    <span>数据理解与“人机校验”能力</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    <span>Python 核心（Pandas / Polars）</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    <span>与 AI 协作的分析核心技能</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2">•</span>
+                    <span>AI 增强的高级分析</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 成就展示 */}
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-4">
