@@ -7,6 +7,9 @@ import Practice from "@/pages/Practice";
 import Achievements from "@/pages/Achievements";
 import Profile from "@/pages/Profile";
 import DataAnalysisFundamentals from "@/pages/DataAnalysisFundamentals";
+import PlatformHome from "@/pages/PlatformHome";
+import ProjectList from "@/pages/ProjectList";
+import ProjectDetail from "@/pages/ProjectDetail";
 
 export default function App() {
   return (
@@ -41,7 +44,10 @@ export default function App() {
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/fundamentals" element={<DataAnalysisFundamentals />} />
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="/platform" element={<PlatformHome />} />
+            <Route path="/platform/projects" element={<ProjectList />} />
+            <Route path="/platform/project/:id" element={<ProjectDetail />} />
+            <Route path="*" element={<Navigate to="/platform" />} />
           </Routes>
         </main>
 
