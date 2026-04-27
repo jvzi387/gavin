@@ -17,18 +17,20 @@ export default function App() {
       <div className="min-h-screen bg-gray-50">
         {/* 导航栏 */}
         <nav className="bg-white shadow-md">
-          <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div className="flex items-center space-x-4">
+          <div className="container mx-auto px-4 py-3">
+            <div className="mb-4 flex justify-center">
               <Link to="/" className="text-xl font-bold text-blue-600">数据分析教育平台</Link>
-              <div className="hidden md:flex space-x-6">
-                <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">首页</Link>
-                <Link to="/courses" className="text-gray-700 hover:text-blue-600 transition-colors">课程中心</Link>
-                <Link to="/achievements" className="text-gray-700 hover:text-blue-600 transition-colors">成就系统</Link>
-              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <Link to="/profile" className="text-gray-700 hover:text-blue-600 transition-colors">个人中心</Link>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">登录</button>
+            <div className="flex justify-between items-center">
+              <div className="flex space-x-6">
+                <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">首页</Link>
+                <Link to="/courses" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">课程中心</Link>
+                <Link to="/achievements" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">成就系统</Link>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Link to="/profile" className="text-gray-700 hover:text-blue-600 transition-colors">个人中心</Link>
+                <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">登录</button>
+              </div>
             </div>
           </div>
         </nav>

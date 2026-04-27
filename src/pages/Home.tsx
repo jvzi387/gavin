@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { courses } from "../data/courses";
 
 export default function Home() {
   return (
@@ -49,61 +50,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 课程分类 */}
-      <section className="py-16 bg-gray-100">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">课程分类</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {
-              [
-                { name: "基础技能", icon: "📝", color: "bg-blue-100" },
-                { name: "商务分析", icon: "💼", color: "bg-green-100" },
-                { name: "数据可视化", icon: "📊", color: "bg-yellow-100" },
-                { name: "机器学习", icon: "🤖", color: "bg-purple-100" }
-              ].map((category, index) => (
-                <Link to="/courses" key={index} className="block">
-                  <div className={`${category.color} rounded-lg p-6 text-center hover:shadow-md transition-shadow`}>
-                    <div className="text-3xl mb-2">{category.icon}</div>
-                    <h3 className="font-semibold">{category.name}</h3>
-                  </div>
-                </Link>
-              ))
-            }
-          </div>
-        </div>
-      </section>
-
-      {/* 推荐课程 */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">推荐课程</h2>
-            <Link to="/courses" className="text-blue-600 hover:underline">查看全部</Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {
-              [1, 2, 3].map((course) => (
-                <Link to={`/courses/${course}`} key={course} className="block">
-                  <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                    <div className="h-48 bg-blue-100 flex items-center justify-center">
-                      <span className="text-blue-500 font-medium">课程封面 {course}</span>
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-semibold mb-2">课程标题 {course}</h3>
-                      <p className="text-gray-600 mb-4">课程描述，包含课程内容和学习目标</p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-500">难度：初级</span>
-                        <span className="text-sm text-blue-600">查看详情</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))
-            }
-          </div>
-        </div>
-      </section>
-
       {/* 数据分析基础 */}
       <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="container mx-auto px-4">
@@ -115,7 +61,7 @@ export default function Home() {
                   <span className="text-7xl mb-6 block">📊</span>
                   <h3 className="text-2xl font-bold mb-4">AI 时代 Python 数据分析</h3>
                   <p className="mb-8 opacity-90">掌握从基础到高级的数据分析技能，开启 AI 时代的数据驱动之旅</p>
-                  <Link to="/fundamentals" className="bg-white text-blue-700 px-8 py-3 rounded-md font-medium hover:bg-blue-50 transition-colors inline-block shadow-md hover:shadow-lg">
+                  <Link to="/courses" className="bg-white text-blue-700 px-8 py-3 rounded-md font-medium hover:bg-blue-50 transition-colors inline-block shadow-md hover:shadow-lg">
                     开始学习
                   </Link>
                 </div>
@@ -153,6 +99,42 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 推荐课程 */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold">推荐课程</h2>
+            <Link to="/courses" className="text-blue-600 hover:underline">查看全部</Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {
+              // 分别获取初级、中级和高级课程
+              [
+                courses.find(course => course.difficulty === '初级'),
+                courses.find(course => course.difficulty === '中级'),
+                courses.find(course => course.difficulty === '高级')
+              ].filter(Boolean).map((course) => (
+                <Link to={`/courses/${course.id}`} key={course.id} className="block">
+                  <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className={`h-48 ${course.coverColor} flex items-center justify-center`}>
+                      <span className="text-gray-600 font-medium">课程封面</span>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold mb-2">{course.title}</h3>
+                      <p className="text-gray-600 mb-4">{course.description}</p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-500">难度：{course.difficulty}</span>
+                        <span className="text-sm text-blue-600">查看详情</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))
+            }
           </div>
         </div>
       </section>
