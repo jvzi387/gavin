@@ -1674,11 +1674,21 @@ print(pivot6)`
             
             <div className="mt-8">
               <h3 className="font-semibold mb-4">练习</h3>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {chapter.exercises.map((exercise, index) => (
-                  <div key={exercise.id} className="p-3 rounded-lg border border-gray-200">
-                    <h6 className="font-medium">{index + 1}. {exercise.title}</h6>
-                    <p className="text-gray-600 text-xs mt-1">{exercise.description}</p>
+                  <div key={exercise.id} className="rounded-lg border border-gray-200 overflow-hidden">
+                    <div className="p-3 bg-gray-50 border-b border-gray-200">
+                      <h6 className="font-medium">{index + 1}. {exercise.title}</h6>
+                      <p className="text-gray-600 text-xs mt-1">{exercise.description}</p>
+                    </div>
+                    <div className="p-3">
+                      <CodeEditor
+                        starterCode={exercise.starterCode}
+                        datasetGeneratorCode={exercise.datasetGeneratorCode}
+                        title={`练习 ${index + 1}`}
+                        height="250px"
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
