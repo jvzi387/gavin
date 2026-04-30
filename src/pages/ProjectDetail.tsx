@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import { projects, getProjectById } from '../data/projects';
 import { getProjectProgress, saveProjectProgress, getCodeDraft, saveCodeDraft, getChatHistory, saveChatHistory } from '../lib/storage';
-import { initPyodide, runPythonCode, isPyodideReady } from '../lib/pyodide';
+import { getPyodide, runCode, isReady } from '../lib/pyodide';
 import { Play, RotateCcw, Brain, HelpCircle, MessageSquare, ChevronLeft, CheckCircle2 } from 'lucide-react';
 
 const ProjectDetail: React.FC = () => {
@@ -24,7 +24,7 @@ const ProjectDetail: React.FC = () => {
     const loadPyodide = async () => {
       try {
         setPyodideStatus('loading');
-        await initPyodide();
+        await getPyodide();
         setPyodideStatus('ready');
       } catch (error) {
         console.error('Pyodide加载失败:', error);
@@ -54,7 +54,7 @@ const ProjectDetail: React.FC = () => {
   }, [project, currentTaskIndex]);
 
   const handleRunCode = async () => {
-    if (!isPyodideReady()) {
+    if (!isReady()) {
       setOutput('Pyodide正在加载中，请稍候...');
       return;
     }
@@ -63,10 +63,18 @@ const ProjectDetail: React.FC = () => {
     setOutput('运行中...\n');
 
     try {
-      const result = await runPythonCode(code);
+      // 替换中文注释以避免编码问题
+      const processedCode = code
+        .replace(/读取数据/g, 'Read data')
+        .replace(/数据形状/g, 'Data shape')
+        .replace(/数据类型/g, 'Data types')
+        .replace(/统计描述/g, 'Stat description')
+        .replace(/前5行/g, 'First 5 rows');
+      
+      const result = await runCode(processedCode);
       
       if (result.success) {
-        setOutput(`运行成功！\n\n${result.result || '(无输出)'}`);
+        setOutput(`运行成功！\n\n${result.output || '(无输出)'}`);
       } else {
         setOutput(`运行错误！\n\n${result.error}`);
       }

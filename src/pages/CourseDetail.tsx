@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { courses, getCourseById } from '../data/courses';
 import CodeEditor from '../components/CodeEditor';
 
@@ -7,7 +7,6 @@ const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const course = getCourseById(id || '');
-  const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({});
   const [selectedExercise, setSelectedExercise] = useState<{ chapterId: string; exerciseId: string } | null>(null);
 
   if (!course) {
@@ -24,13 +23,6 @@ const CourseDetail: React.FC = () => {
       </div>
     );
   }
-
-  const toggleChapter = (chapterId: string) => {
-    setExpandedChapters(prev => ({
-      ...prev,
-      [chapterId]: !prev[chapterId]
-    }));
-  };
 
   const handleExerciseSelect = (chapterId: string, exerciseId: string) => {
     setSelectedExercise({ chapterId, exerciseId });
@@ -92,7 +84,7 @@ const CourseDetail: React.FC = () => {
 import numpy as np
 
 # 读取CSV文件
-df = pd.read_csv('data.csv')
+df = pd.read_csv('user_orders.csv')
 
 # 查看数据形状
 print("数据形状:", df.shape)
@@ -291,6 +283,72 @@ print(pivot6)`
 
     // 如果当前章节有对应的代码示例，添加到内容末尾
     if (chapterCodeExamples[chapterId]) {
+      // 添加数据预览表格
+      if (chapterId === 'ch-1-1') {
+        elements.push(
+          <div key={elements.length} className="mt-6 mb-6">
+            <h3 className="text-lg font-semibold mb-3">数据预览</h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white border border-gray-200">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 border-b">order_id</th>
+                    <th className="py-2 px-4 border-b">user_id</th>
+                    <th className="py-2 px-4 border-b">product</th>
+                    <th className="py-2 px-4 border-b">region</th>
+                    <th className="py-2 px-4 border-b">amount</th>
+                    <th className="py-2 px-4 border-b">order_date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="py-2 px-4 border-b">ORD00001</td>
+                    <td className="py-2 px-4 border-b">1234</td>
+                    <td className="py-2 px-4 border-b">手机</td>
+                    <td className="py-2 px-4 border-b">北京</td>
+                    <td className="py-2 px-4 border-b">2500</td>
+                    <td className="py-2 px-4 border-b">2024-01-01</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4 border-b">ORD00002</td>
+                    <td className="py-2 px-4 border-b">5678</td>
+                    <td className="py-2 px-4 border-b">电脑</td>
+                    <td className="py-2 px-4 border-b">上海</td>
+                    <td className="py-2 px-4 border-b">8999</td>
+                    <td className="py-2 px-4 border-b">2024-01-02</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4 border-b">ORD00003</td>
+                    <td className="py-2 px-4 border-b">1234</td>
+                    <td className="py-2 px-4 border-b">耳机</td>
+                    <td className="py-2 px-4 border-b">北京</td>
+                    <td className="py-2 px-4 border-b">299</td>
+                    <td className="py-2 px-4 border-b">2024-01-03</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4 border-b">ORD00004</td>
+                    <td className="py-2 px-4 border-b">9012</td>
+                    <td className="py-2 px-4 border-b">平板</td>
+                    <td className="py-2 px-4 border-b">广州</td>
+                    <td className="py-2 px-4 border-b">3499</td>
+                    <td className="py-2 px-4 border-b">2024-01-04</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4 border-b">ORD00005</td>
+                    <td className="py-2 px-4 border-b">5678</td>
+                    <td className="py-2 px-4 border-b">充电器</td>
+                    <td className="py-2 px-4 border-b">上海</td>
+                    <td className="py-2 px-4 border-b">129</td>
+                    <td className="py-2 px-4 border-b">2024-01-05</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-gray-500 mt-2">显示前5行数据</p>
+          </div>
+        );
+      }
+      
       elements.push(
         <div key={elements.length} className="mt-6 mb-6">
           <h3 className="text-lg font-semibold mb-3">代码示例</h3>
@@ -308,14 +366,27 @@ print(pivot6)`
           <h3 className="text-lg font-semibold mb-3">练习代码框</h3>
           <p className="text-gray-600 mb-3">请在此处编写代码进行练习：</p>
           <CodeEditor
-            starterCode={`# 请在此处编写代码进行练习
-# 例如：
-# import pandas as pd
-# import numpy as np
+            starterCode={`import pandas as pd
+import numpy as np
 
-# 1. 创建一个示例数据框
-# 2. 进行数据处理
-# 3. 分析结果`}
+# 读取数据
+df = pd.read_csv('user_orders.csv')
+
+# 练习1：计算每个用户的总订单金额
+user_total = df.groupby('user_id')['amount'].sum()
+print("\n每个用户的总订单金额:")
+print(user_total)
+
+# 练习2：计算每个地区的订单数量
+region_count = df.groupby('region')['order_id'].count()
+print("\n每个地区的订单数量:")
+print(region_count)
+
+# 练习3：找出销售额最高的产品
+product_sales = df.groupby('product')['amount'].sum()
+top_product = product_sales.idxmax()
+print(f"\n销售额最高的产品: {top_product}")
+print(f"销售额: {product_sales[top_product]:.2f}")`}
             title="练习代码"
             height="300px"
           />
@@ -356,18 +427,8 @@ print(pivot6)`
                 <button 
                   className="w-3/4 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
                   onClick={() => {
-                    // 自动展开第一章
-                    setExpandedChapters(prev => ({
-                      ...prev,
-                      [course.chapters[0].id]: true
-                    }));
-                    // 滚动到第一章
-                    setTimeout(() => {
-                      const chapterElement = document.getElementById(`chapter-${course.chapters[0].id}`);
-                      if (chapterElement) {
-                        chapterElement.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }, 100);
+                    // 导航到第一章
+                    navigate(`/learn/${course.id}/${course.chapters[0].id}`);
                   }}
                 >
                   开始学习
@@ -384,41 +445,20 @@ print(pivot6)`
             <div className="space-y-6">
               {course.chapters.map((chapter, index) => (
                 <div key={chapter.id} id={`chapter-${chapter.id}`} className="border-b pb-6">
-                  <div 
-                    className="flex items-center justify-between cursor-pointer"
-                    onClick={() => toggleChapter(chapter.id)}
+                  <button 
+                    onClick={() => {
+                      navigate(`/learn/${course.id}/${chapter.id}`);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="w-full flex items-center justify-between cursor-pointer hover:text-blue-600 transition-colors text-left"
                   >
                     <h4 className="font-medium text-lg">第{index + 1}章：{chapter.title}</h4>
                     <span className="text-gray-400">
-                      {expandedChapters[chapter.id] ? '▼' : '▶'}
+                      ➡️
                     </span>
-                  </div>
+                  </button>
                   <p className="text-gray-600 text-sm mt-1">{chapter.description}</p>
                   <p className="text-gray-500 text-xs mt-1">包含 {chapter.exercises.length} 个练习</p>
-                  
-                  {expandedChapters[chapter.id] && (
-                    <div className="mt-4 space-y-6 pl-4 border-l-2 border-gray-100">
-                      <div className="prose max-w-none">
-                        {renderChapterContent(chapter.content, chapter.id)}
-                      </div>
-                      
-                      <div className="mt-6">
-                        <h5 className="font-medium text-gray-700 mb-3">章节练习</h5>
-                        <div className="space-y-3">
-                          {chapter.exercises.map((exercise, exerciseIndex) => (
-                            <div 
-                              key={exercise.id} 
-                              className={`p-3 rounded-lg cursor-pointer transition-colors ${selectedExercise?.exerciseId === exercise.id ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'}`}
-                              onClick={() => handleExerciseSelect(chapter.id, exercise.id)}
-                            >
-                              <h6 className="font-medium">{exerciseIndex + 1}. {exercise.title}</h6>
-                              <p className="text-gray-600 text-xs mt-1">{exercise.description}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
