@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { Play, RotateCcw, Eye, RefreshCw } from 'lucide-react';
-import { getPyodide, runCode, isReady, reset } from '../lib/pyodide';
+import { initPyodide, runPythonCode } from '../lib/pyodide';
 
 const dataFiles: Record<string, string> = {
   'user_orders.csv': `order_id,user_id,product,region,amount,order_date
@@ -68,9 +68,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const [code, setCode] = useState('');
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [showAnswer, setShowAnswer] = useState(false);
   const [userCode, setUserCode] = useState('');
+  const isPyodideReady = status === 'ready';
 
   useEffect(() => {
     loadPyodide();
@@ -79,7 +81,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   const loadPyodide = async () => {
     try {
       setStatus('loading');
-      const py = await getPyodide();
+      const py = await initPyodide();
       
       for (const [filename, content] of Object.entries(dataFiles)) {
         try {
@@ -96,65 +98,29 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   };
 
+  // 替换 handleRun 函数
   const handleRun = async () => {
-    if (!isReady()) {
-      setOutput('请等待Python环境加载完成...');
+    if (!isPyodideReady) {
+      setOutput('⏳ Python 环境正在加载中，请稍后再试...');
       return;
     }
-
-    if (!code.trim()) {
-      setOutput('请先输入代码或点击"显示参考答案"查看示例代码');
-      return;
-    }
-
-    setIsRunning(true);
-    setOutput('正在运行...\n');
-
+    
+    setIsLoading(true);
+    setOutput('🏃 正在执行代码...');
+    
     try {
-      if (datasetGeneratorCode) {
-        await runCode(datasetGeneratorCode);
-      }
-
-      const processedCode = code
-        .replace(/读取数据/g, 'Read data')
-        .replace(/数据形状/g, 'Data shape')
-        .replace(/数据类型/g, 'Data types')
-        .replace(/统计描述/g, 'Stat description')
-        .replace(/前5行/g, 'First 5 rows')
-        .replace(/练习1:/g, 'Exercise 1:')
-        .replace(/练习2:/g, 'Exercise 2:')
-        .replace(/每个用户的总订单金额:/g, 'Total per user:')
-        .replace(/每个地区的订单数量:/g, 'Count per region:')
-        .replace(/检查缺失值/g, 'Check missing values')
-        .replace(/金额列用中位数填充/g, 'Fill amount with median')
-        .replace(/地区列用众数填充/g, 'Fill region with mode')
-        .replace(/缺失值处理完成/g, 'Missing values filled')
-        .replace(/按月统计销售数据/g, 'Monthly sales stats')
-        .replace(/透视表/g, 'Pivot table')
-        .replace(/合并订单与用户信息/g, 'Merge orders and users')
-        .replace(/计算工作时长/g, 'Calculate work hours')
-        .replace(/画折线图/g, 'Draw line chart')
-        .replace(/天气数据:/g, 'Weather data:')
-        .replace(/设置中文字体/g, 'Set Chinese font')
-        .replace(/生成随机数组/g, 'Generate random array')
-        .replace(/方法性能对比/g, 'Method performance')
-        .replace(/完整探索性数据分析/g, 'Full EDA')
-        .replace(/数据概览:/g, 'Data overview:')
-        .replace(/缺失值分析:/g, 'Missing values:')
-        .replace(/相关性分析:/g, 'Correlation analysis:');
-
-      const result = await runCode(processedCode);
-
-      if (result.success) {
-        setOutput(`✅ 运行成功！\n\n${result.output}`);
+      const result = await runPythonCode(code);
+      
+      if (result.error) {
+        setOutput(`❌ 错误:\n${result.error}`);
       } else {
-        setOutput(`❌ 运行失败！\n\n${result.error}`);
+        setOutput(result.output);
       }
-    } catch (error: any) {
-      setOutput(`❌ 错误：${error.message}`);
-    } finally {
-      setIsRunning(false);
+    } catch (err: any) {
+      setOutput(`❌ 执行失败:\n${err.message}`);
     }
+    
+    setIsLoading(false);
   };
 
   const handleReset = () => {
@@ -178,7 +144,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   const handleReload = async () => {
-    reset();
     setStatus('loading');
     setOutput('');
     await loadPyodide();

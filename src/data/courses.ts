@@ -6,7 +6,9 @@ export interface Course {
   category: string;
   coverColor: string;
   chapters: Chapter[];
-  projectId?: string; // 关联的项目ID
+  projectId?: string;
+  videoUrl?: string;
+  resources?: Resource[];
 }
 
 export interface Chapter {
@@ -14,6 +16,7 @@ export interface Chapter {
   title: string;
   description: string;
   content: string;
+  videoUrl?: string;
   exercises: Exercise[];
 }
 
@@ -27,6 +30,14 @@ export interface Exercise {
   hints: string[];
 }
 
+export interface Resource {
+  id: string;
+  title: string;
+  type: 'video' | 'document' | 'notebook' | 'dataset';
+  url: string;
+  description: string;
+}
+
 export const courses: Course[] = [
   {
     id: 'course-1',
@@ -36,11 +47,18 @@ export const courses: Course[] = [
     category: '基础技能',
     coverColor: 'bg-blue-100',
     projectId: 'project-1',
+    videoUrl: 'https://www.bilibili.com/video/BV1Zt411o7dU/',
+    resources: [
+      { id: 'res-1-1', title: 'Pandas官方文档', type: 'document', url: 'https://pandas.pydata.org/docs/', description: 'Pandas官方中文文档，包含完整的API参考' },
+      { id: 'res-1-2', title: '数据清洗实战视频', type: 'video', url: 'https://www.bilibili.com/video/BV1Zt411o7dU/', description: '手把手教你使用Pandas进行数据清洗' },
+      { id: 'res-1-3', title: 'Jupyter Notebook示例', type: 'notebook', url: 'https://github.com/pandas-dev/pandas/tree/main/doc/source/getting_started', description: '官方入门教程和示例代码' }
+    ],
     chapters: [
       {
         id: 'ch-1-1',
         title: '数据读取与基础信息',
         description: '学习如何读取数据并获取基础信息',
+        videoUrl: 'https://www.bilibili.com/video/BV1Zt411o7dU/?p=1',
         content: `
 # 数据读取与基础信息
 
@@ -89,6 +107,7 @@ export const courses: Course[] = [
         id: 'ch-1-2',
         title: '缺失值处理',
         description: '学习如何识别和处理数据中的缺失值',
+        videoUrl: 'https://www.bilibili.com/video/BV1Zt411o7dU/?p=2',
         content: `
 # 缺失值处理
 

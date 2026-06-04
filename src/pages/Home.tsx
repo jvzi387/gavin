@@ -1,7 +1,48 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { courses } from "../data/courses";
+import CourseModal from "../components/CourseModal";
+
+// 成就数据
+const achievementData = [
+  { id: "achievement-1", name: "✨ 初识数据", unlocked: false },
+  { id: "achievement-2", name: "数据探索者", unlocked: false },
+  { id: "achievement-3", name: "代码大师", unlocked: false },
+];
 
 export default function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [achievements, setAchievements] = useState(achievementData);
+
+  // 从localStorage加载成就状态
+  useEffect(() => {
+    const saved = localStorage.getItem("achievements");
+    if (saved) {
+      setAchievements(JSON.parse(saved));
+    }
+  }, []);
+
+  // 保存成就状态到localStorage
+  const saveAchievements = (newAchievements: typeof achievementData) => {
+    setAchievements(newAchievements);
+    localStorage.setItem("achievements", JSON.stringify(newAchievements));
+  };
+
+  // 解锁成就
+  const unlockAchievement = (id: string) => {
+    const updated = achievements.map(a => 
+      a.id === id ? { ...a, unlocked: true } : a
+    );
+    saveAchievements(updated);
+  };
+
+  // 处理弹窗关闭
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    // 解锁第一个成就
+    unlockAchievement("achievement-1");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 英雄区 */}
@@ -61,9 +102,12 @@ export default function Home() {
                   <span className="text-7xl mb-6 block">📊</span>
                   <h3 className="text-2xl font-bold mb-4">AI 时代 Python 数据分析</h3>
                   <p className="mb-8 opacity-90">掌握从基础到高级的数据分析技能，开启 AI 时代的数据驱动之旅</p>
-                  <Link to="/courses" className="bg-white text-blue-700 px-8 py-3 rounded-md font-medium hover:bg-blue-50 transition-colors inline-block shadow-md hover:shadow-lg">
+                  <button 
+                    onClick={() => setIsModalOpen(true)} 
+                    className="bg-white text-blue-700 px-8 py-3 rounded-md font-medium hover:bg-blue-50 transition-colors inline-block shadow-md hover:shadow-lg"
+                  >
                     开始学习
-                  </Link>
+                  </button>
                 </div>
               </div>
               <div className="md:w-1/2 p-10">
@@ -146,20 +190,40 @@ export default function Home() {
             <h2 className="text-3xl font-bold">成就展示</h2>
             <Link to="/achievements" className="text-blue-600 hover:underline">查看全部</Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {
-              [1, 2, 3, 4].map((badge) => (
-                <div key={badge} className="bg-white rounded-lg p-4 flex flex-col items-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2">
-                    <span className="text-blue-500 font-bold">{badge}</span>
-                  </div>
-                  <p className="text-center font-medium">成就名称 {badge}</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+            {achievements.map((achievement) => (
+              <div 
+                key={achievement.id} 
+                className={`bg-white rounded-lg p-6 flex flex-col items-center hover:shadow-md transition-all cursor-pointer ${achievement.unlocked ? 'hover:-translate-y-1' : 'opacity-60'}`}
+              >
+                <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 text-4xl ${
+                  achievement.unlocked 
+                    ? 'bg-gradient-to-br from-yellow-100 to-orange-100' 
+                    : 'bg-gray-200'
+                }`}>
+                  {achievement.unlocked ? '🏆' : '🔒'}
                 </div>
-              ))
-            }
+                <p className={`text-center font-semibold text-lg ${
+                  achievement.unlocked ? 'text-gray-800' : 'text-gray-500'
+                }`}>
+                  {achievement.unlocked ? `${achievement.name} ✅` : achievement.name}
+                </p>
+                {achievement.unlocked && (
+                  <p className="text-xs text-green-600 mt-2 font-medium">
+                    已解锁
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* 课程弹窗 */}
+      <CourseModal 
+        isOpen={isModalOpen} 
+        onClose={handleModalClose} 
+      />
     </div>
   );
 }
