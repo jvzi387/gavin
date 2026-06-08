@@ -6,7 +6,7 @@ export async function initPyodide() {
   return {};
 }
 
-export async function runPythonCode(code: string) {
+export async function runPythonCode(code: string): Promise<{ output: string; error?: string }> {
   await new Promise(r => setTimeout(r, 300));
   
   // 智能返回示例输出
