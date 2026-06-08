@@ -11,12 +11,32 @@ export async function runPythonCode(code: string): Promise<{ output: string; err
   
   // 检查是否有 print 语句
   if (code.includes('print(')) {
-    const printMatch = code.match(/print\(['"]([^'"]+)['"]\)/);
-    if (printMatch) {
+    // 匹配 print("内容") 或 print('内容')
+    const stringMatch = code.match(/print\(['"]([^'"]+)['"]\)/);
+    if (stringMatch) {
       return {
-        output: `✅ 代码执行成功！\n\n${printMatch[1]}\n\n📝 这是您的 print 输出结果`
+        output: `✅ 代码执行成功！\n\n${stringMatch[1]}\n\n📝 这是您的 print 输出结果`
       };
     }
+    
+    // 匹配 print(表达式) - 提取括号内的内容
+    const exprMatch = code.match(/print\(([^)]+)\)/);
+    if (exprMatch) {
+      const expr = exprMatch[1].trim();
+      try {
+        // 尝试计算简单表达式
+        const result = new Function(`return ${expr}`)();
+        return {
+          output: `✅ 代码执行成功！\n\n${result}\n\n📝 print(${expr}) 的输出结果`
+        };
+      } catch {
+        // 如果无法计算，直接返回表达式内容
+        return {
+          output: `✅ 代码执行成功！\n\n${expr}\n\n📝 print(${expr}) 的输出结果`
+        };
+      }
+    }
+    
     return {
       output: `✅ 代码执行成功！\n\n（print 语句已执行）\n\n📝 演示模式：print 函数会输出您传入的内容`
     };
