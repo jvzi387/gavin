@@ -102,12 +102,12 @@ export default function Home() {
                   <span className="text-7xl mb-6 block">📊</span>
                   <h3 className="text-2xl font-bold mb-4">AI 时代 Python 数据分析</h3>
                   <p className="mb-8 opacity-90">掌握从基础到高级的数据分析技能，开启 AI 时代的数据驱动之旅</p>
-                  <button 
-                    onClick={() => setIsModalOpen(true)} 
+                  <Link 
+                    to="/courses" 
                     className="bg-white text-blue-700 px-8 py-3 rounded-md font-medium hover:bg-blue-50 transition-colors inline-block shadow-md hover:shadow-lg"
                   >
                     开始学习
-                  </button>
+                  </Link>
                 </div>
               </div>
               <div className="md:w-1/2 p-10">
