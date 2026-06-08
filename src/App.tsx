@@ -11,6 +11,7 @@ import DataAnalysisFundamentals from "@/pages/DataAnalysisFundamentals";
 import PlatformHome from "@/pages/PlatformHome";
 import ProjectList from "@/pages/ProjectList";
 import ProjectDetail from "@/pages/ProjectDetail";
+import TestPython from "@/pages/TestPython";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import { auth, User } from "./data/users";
@@ -119,6 +120,7 @@ export default function App() {
                   <Route path="/platform" element={<PlatformHome />} />
                   <Route path="/platform/projects" element={<ProjectList />} />
                   <Route path="/platform/project/:id" element={<ProjectDetail />} />
+                  <Route path="/test-python" element={<TestPython />} />
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
               </main>

@@ -363,7 +363,6 @@ print(pivot3)`
                     <p className="text-gray-600 text-sm mb-3">{exercise.description}</p>
                     <CodeEditor
                       starterCode={exercise.starterCode}
-                      datasetGeneratorCode={exercise.datasetGeneratorCode}
                       title={exercise.title}
                       height="300px"
                     />
