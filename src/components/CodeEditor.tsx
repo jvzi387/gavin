@@ -104,9 +104,14 @@ export default function CodeEditor({ starterCode, datasetGeneratorCode, title, h
       />
 
       {/* 输出区 */}
-      <div style={{ padding: '12px', background: '#1e1e1e', color: '#d4d4d4', fontFamily: 'monospace', fontSize: '13px', borderTop: '1px solid #ddd', minHeight: '150px' }}>
-        <div style={{ marginBottom: '8px', color: '#888' }}>输出结果：</div>
-        <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{output}</pre>
+      <div style={{ padding: '16px', background: '#1e1e1e', color: '#d4d4d4', fontFamily: 'monospace', fontSize: '13px', borderTop: '1px solid #ddd', minHeight: '200px' }}>
+        <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
+          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#4ec9b0', marginRight: '8px' }}></span>
+          <span style={{ color: '#888', fontSize: '14px', fontWeight: 'bold' }}>📋 输出结果</span>
+        </div>
+        <div style={{ padding: '12px', background: '#2d2d2d', borderRadius: '6px', minHeight: '120px' }}>
+          <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: '1.6' }}>{output}</pre>
+        </div>
       </div>
     </div>
   );
